@@ -2,7 +2,7 @@ import requests
 import json
 import time
 import base64
-from LCU import getKey, getPort
+from LeagueClientInfo import getKey, getPort
 
 def Main():
 
