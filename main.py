@@ -6,9 +6,12 @@ from LeagueClientInfo import getKey, getPort
 
 def Main():
 
-    while(CheckPhase() != "InProgress"):     #If you are not in a game, keep polling
+    Port = getPort() #Get the port
+    Key = getKey() #Get the unencoded key
+    
+    while(CheckPhase(Port, Key) != "InProgress"):     #If you are not in a game, keep polling
         
-        match CheckPhase():
+        match CheckPhase(Port, Key):
 
             case "Lobby":
                 
@@ -23,13 +26,10 @@ def Main():
 
             case "ReadyCheck":
                 
-                AcceptQueue()
+                AcceptQueue(Port, Key)
                 time.sleep(1)
 
 def CheckPhase():
-
-    Port = getPort() #Get the port
-    Key = getKey() #Get the unencoded key
 
     url = "https://127.0.0.1:" + Port + "/lol-gameflow/v1/session" #Set the url using port
     
@@ -64,9 +64,6 @@ def CheckPhase():
 
 def AcceptQueue():
 
-    Port = getPort()
-    Key = getKey()
-
     url = "https://127.0.0.1:" + Port + "/lol-matchmaking/v1/ready-check/accept"
  
     apiKeyBeforeEncode = "riot:" + Key
@@ -80,9 +77,7 @@ def AcceptQueue():
     'Authorization': apiKey
     }
     
-    
     payload = {}
-    
     
     requests.request("POST", url, headers=headers, data=payload, verify=False)
 
